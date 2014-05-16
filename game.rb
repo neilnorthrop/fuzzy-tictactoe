@@ -50,6 +50,8 @@ class Tictactoe < Board
 			"o is the winner!"
 		when [[1, 2, "o"], [1, "o", 3], ["o", 2, 3]]
 			"o is the winner!"
+		else
+			"no winner yet"
 		end
 	end
 end
