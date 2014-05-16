@@ -67,11 +67,27 @@ def winner_check
 	end
 end
 
+##################################################
+# Computer turn to-dos:
+#
+#
+##################################################
+
 def computer_turn
-	if @game.check_position(1,1) == 2
+	if @game.check_position(1,1) != "x" && @game.check_position(1,1) != "o"
 		@game.board.set_position(1,1,"o")
 	end
 end
+
+##################################################
+# Game loop to-dos:
+# work on the computer's turn logic
+# 
+#
+#
+#
+#
+##################################################
 
 def full_game
 

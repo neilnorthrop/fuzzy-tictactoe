@@ -17,38 +17,53 @@ class Tictactoe < Board
 	end
 
 	def check_game
-		case @board.board
-		when [["x", "x", "x"], [1, 2, 3], [1, 2, 3]]
+			# [["x", "x", "x"], [1, 2, 3], [1, 2, 3]]
+		if check_position(0,0) == "x" && check_position(0,1) == "x" && check_position(0,2) == "x"
 			"x is the winner!"
-		when [[1, 2, 3], ["x", "x", "x"], [1, 2, 3]]
+			# [[1, 2, 3], ["x", "x", "x"], [1, 2, 3]]
+		elsif check_position(1,0) == "x" && check_position(1,1) == "x" && check_position(1,2) == "x"
 			"x is the winner!"
-		when [[1, 2, 3], [1, 2, 3], ["x", "x", "x"]]
+			# [[1, 2, 3], [1, 2, 3], ["x", "x", "x"]]
+		elsif check_position(2,0) == "x" && check_position(2,1) == "x" && check_position(2,2) == "x"
 			"x is the winner!"
-		when [[1, 2, "x"], [1, 2, "x"], [1, 2, "x"]]
+			# [[1, 2, "x"], [1, 2, "x"], [1, 2, "x"]]
+		elsif check_position(0,2) == "x" && check_position(1,2) == "x" && check_position(2,2) == "x"
 			"x is the winner!"
-		when [[1, "x", 3], [1, "x", 3], [1, "x", 3]]
+			# [[1, "x", 3], [1, "x", 3], [1, "x", 3]]
+		elsif check_position(0,1) == "x" && check_position(1,1) == "x" && check_position(2,1) == "x"
 			"x is the winner!"
-		when [["x", 2, 3], ["x", 2, 3], ["x", 2, 3]]
+			# [["x", 2, 3], ["x", 2, 3], ["x", 2, 3]]
+		elsif check_position(0,0) == "x" && check_position(1,0) == "x" && check_position(2,0) == "x"
 			"x is the winner!"
-		when [["x", 2, 3], [1, "x", 3], [1, 2, "x"]]
+			# [["x", 2, 3], [1, "x", 3], [1, 2, "x"]]
+		elsif check_position(0,0) == "x" && check_position(1,1) == "x" && check_position(2,2) == "x"
 			"x is the winner!"
-		when [[1, 2, "x"], [1, "x", 3], ["x", 2, 3]]
+			# [[1, 2, "x"], [1, "x", 3], ["x", 2, 3]]
+		elsif check_position(0,2) == "x" && check_position(1,1) == "x" && check_position(2,0) == "x"
 			"x is the winner!"
-		when [["o", "o", "o"], [1, 2, 3], [1, 2, 3]]
+			# [["o", "o", "o"], [1, 2, 3], [1, 2, 3]]
+		elsif check_position(0,0) == "o" && check_position(0,1) == "o" && check_position(0,2) == "o"
 			"o is the winner!"
-		when [[1, 2, 3], ["o", "o", "o"], [1, 2, 3]]
+			# [[1, 2, 3], ["o", "o", "o"], [1, 2, 3]]
+		elsif check_position(1,0) == "o" && check_position(1,1) == "o" && check_position(1,2) == "o"
 			"o is the winner!"
-		when [[1, 2, 3], [1, 2, 3], ["o", "o", "o"]]
+			# [[1, 2, 3], [1, 2, 3], ["o", "o", "o"]]
+		elsif check_position(2,0) == "o" && check_position(2,1) == "o" && check_position(2,2) == "o"
 			"o is the winner!"
-		when [[1, 2, "o"], [1, 2, "o"], [1, 2, "o"]]
+			# [[1, 2, "o"], [1, 2, "o"], [1, 2, "o"]]
+		elsif check_position(0,2) == "o" && check_position(1,2) == "o" && check_position(2,2) == "o"
 			"o is the winner!"
-		when [[1, "o", 3], [1, "o", 3], [1, "o", 3]]
+			# [[1, "o", 3], [1, "o", 3], [1, "o", 3]]
+		elsif check_position(0,1) == "o" && check_position(1,1) == "o" && check_position(2,1) == "o"
 			"o is the winner!"
-		when [["o", 2, 3], ["o", 2, 3], ["o", 2, 3]]
+			# [["o", 2, 3], ["o", 2, 3], ["o", 2, 3]]
+		elsif check_position(0,0) == "o" && check_position(1,0) == "o" && check_position(2,0) == "o"
 			"o is the winner!"
-		when [["o", 2, 3], [1, "o", 3], [1, 2, "o"]]
+			# [["o", 2, 3], [1, "o", 3], [1, 2, "o"]]
+		elsif check_position(0,0) == "o" && check_position(1,1) == "o" && check_position(2,2) == "o"
 			"o is the winner!"
-		when [[1, 2, "o"], [1, "o", 3], ["o", 2, 3]]
+			# [[1, 2, "o"], [1, "o", 3], ["o", 2, 3]]
+		elsif check_position(0,2) == "o" && check_position(1,1) == "o" && check_position(2,0) == "o"
 			"o is the winner!"
 		else
 			"no winner yet"
