@@ -3,8 +3,9 @@
 require './game.rb'
 
 def enter_game
-	puts "Do you want to play a game? yes or no"
+	puts "Do you want to play a game? 'yes' or 'no'"
 	answer = gets.chomp.downcase
+	puts
 
 	case answer
 	when 'yes'
@@ -17,7 +18,7 @@ def enter_game
 		puts "too bad\n\n"
 		exit
 	else
-		puts "you need to pick yes or no\n\n"
+		puts "you need to pick 'yes' or 'no'\n\n"
 		enter_game
 	end
 end
@@ -49,7 +50,7 @@ def player_case(num)
 	when 9
 		return [2,2]
 	else
-		puts "please pick a number 1-9"
+		puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
 		full_game
 	end
 end
@@ -83,7 +84,7 @@ def full_game
 	player_pick = if player_pick =~ /\d/
 		player_case(player_pick)
 	else
-		puts "please pick a number 1-9"
+		puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
 		full_game
 	end
 
