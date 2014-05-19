@@ -3,7 +3,7 @@
 require './game.rb'
 
 def enter_game
-	puts "Do you want to play a game? 'yes' or 'no'"
+	puts "Do you want to play a game? Please type 'yes' or 'no'"
 	answer = gets.chomp.downcase
 	puts
 
@@ -11,6 +11,7 @@ def enter_game
 	when 'yes'
 		puts "okay, lets play\n\n" + "*" * 30 + "\n\n"
 		puts "You'll start first and be the letter 'x'\n\n"
+		puts "\n\n" + "*" * 30 + "\n\n"
 		@game = Tictactoe.new(Board.new)
 		@game.board.build_board
 		full_game
@@ -23,10 +24,13 @@ def enter_game
 	end
 end
 
-def display
-	puts "[1, 2, 3]"
-	puts "[4, 5, 6]"
-	puts "[7, 8, 9]\n"
+def display(board)
+	print board[0]
+	puts
+	print board[1]
+	puts
+	print board[2]
+	puts
 end
 
 def player_case(num)
@@ -69,8 +73,12 @@ end
 
 ##################################################
 # Computer turn to-dos:
-#
-#
+# 
+# 
+# 
+# 
+# 
+# 
 ##################################################
 
 def computer_turn
@@ -93,23 +101,21 @@ def full_game
 
 	puts "Please pick the number to where you want to play:\n"
 	
-	display
+	display(@game.board.board)
 	
-	player_pick = gets.chomp
+	player_number_picked = gets.chomp
 
-	player_pick = if player_pick =~ /\d/
-		player_case(player_pick)
+	player_number_picked = if player_number_picked =~ /\d/
+		player_case(player_number_picked)
 	else
 		puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
 		full_game
 	end
 
-	@game.board.set_position(player_pick[0], player_pick[1], "x")
-	pp @game.board.display
+	@game.board.set_position(player_number_picked[0], player_number_picked[1], "x")
 	winner_check
 
 	computer_turn
-	pp @game.board.display
 	winner_check
 
 	full_game

@@ -15,18 +15,16 @@ class Board
 	end
 
 	def build_board
-		@size.times do
-			@board << (1..@size).to_a
-		end
+		@board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 		return @board
 	end
 
 	def set_position(row, index, letter)
-		@board[row][index] = letter
-	end
-
-	def display
-		@board.to_s
+		if @board[row][index] == "x" || @board[row][index] == "o"
+			return false
+		else
+			@board[row][index] = letter
+		end
 	end
 
 	def clear_board
