@@ -14,9 +14,10 @@ def enter_game
 		puts "\n\n" + "*" * 30 + "\n\n"
 		@game = Tictactoe.new(Board.new)
 		@game.board.build_board
-		full_game
+		game_loop
 	when 'no'
-		puts "too bad\n\n"
+		print `clear`
+		puts "too bad dude/dudette\n\n"
 		exit
 	else
 		puts "you need to pick 'yes' or 'no'\n\n"
@@ -55,11 +56,18 @@ def player_case(num)
 		return [2,2]
 	else
 		puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
-		full_game
+		game_loop
 	end
 end
 
-def winner_check
+def check_for_winner
+	if @game.board.board == [["x", "o", "x"], ["x", "o", "x"], ["o", "x", "o"]] ||
+		 @game.board.board == [["x", "o", "x"], ["o", "o", "x"], ["x", "x", "o"]] ||
+		 @game.board.board == [["x", "o", "x"], ["x", "o", "o"], ["o", "x", "x"]] ||
+		 @game.board.board == [["o", "o", "x"], ["x", "x", "o"], ["o", "x", "x"]]
+		puts "TIE"
+		enter_game
+	end
 	if @game.check_game == "x is the winner!"
 		puts "x wins"
 		enter_game
@@ -81,9 +89,88 @@ end
 # 
 ##################################################
 
-def computer_turn
-	if @game.check_position(1,1) != "x" && @game.check_position(1,1) != "o"
+def computer_turn(board)
+	if board == [["x", 2, 3], [4, 5, 6], [7, 8, 9]] ||
+		 board == [[1, 2, "x"], [4, 5, 6], [7, 8, 9]] ||
+		 board == [[1, 2, 3], [4, 5, 6], ["x", 8, 9]] ||
+		 board == [[1, 2, 3], [4, 5, 6], [7, 8, "x"]]
 		@game.board.set_position(1,1,"o")
+	end
+	if board == [[1, "x", 3], [4, 5, 6], [7, 8, 9]] ||
+		 board == [[1, 2, 3], ["x", 5, 6], [7, 8, 9]] ||
+		 board == [[1, 2, 3], [4, "x", 6], [7, 8, 9]]
+		@game.board.set_position(0,0,"o")		
+	end
+	if board == [[1, 2, 3], [4, 5, "x"], [7, 8, 9]]
+		@game.board.set_position(0,2,"o")
+	end
+	if board == [[1, 2, 3], [4, 5, 6], [7, "x", 9]]
+		@game.board.set_position(0,1,"o")
+	end
+	if board == [[1, "o", "x"], [4, 5, 6], [7, "x", 9]] ||
+		 board == [["x", "o", 3], [4, 5, 6], [7, "x", 9]]
+		@game.board.set_position(2,0,"o")
+	end
+	if board == [[1, "o", "x"], [4, "x", 6], ["o", "x", 9]]
+		@game.board.set_position(0,0,"o")
+	end
+	if board == [["o", "o", "x"], ["x", "x", 6], ["o", "x", 9]]
+		@game.board.set_position(1,2,"o")
+	end
+	if board == [["o", "o", "x"], [4, "x", "x"], ["o", "x", 9]]
+		@game.board.set_position(1,0,"o")
+	end
+	if board == [["o", "o", "x"], [4, "x", 6], ["o", "x", "x"]]
+		@game.board.set_position(1,0,"o")
+	end
+	if board == [["x", "o", "x"], [4, 5, 6], ["o", "x", 9]] ||
+		 board == [[1, "o", "x"], ["x", 5, 6], ["o", "x", 9]]
+		@game.board.set_position(1,1,"o")
+	end
+	if board == [["x", "o", "x"], ["x", "o", 6], ["o", "x", 9]] ||
+		 board == [["x", "o", "x"], ["x", "o", 6], ["o", "x", 9]] ||
+		 board == [[1, "o", "x"], ["x", "o", 6], ["o", "x", "x"]]
+		@game.board.set_position(1,2,"o")
+	end
+	if board == [["x", "o", "x"], [4, "o", "x"], ["o", "x", 9]]
+		@game.board.set_position(2,2,"o")
+	end
+	if board == [[1, "o", "x"], [4, 5, 6], ["o", "x", "x"]]
+		@game.board.set_position(1,2,"o")
+	end
+	if board == [[1, "o", "x"], [4, "x", "o"], ["o", "x", "x"]]
+		@game.board.set_position(0,0,"o")
+	end
+	if board == [["x", "o", "x"], [4, 5, "o"], ["o", "x", "x"]] ||
+		 board == [[1, "o", "x"], ["x", 5, "o"], ["o", "x", "x"]]
+		@game.board.set_position(1,1,"o")
+	end
+	if board == [["x", 2, "x"], [4, "o", 6], [7, 8, 9]] ||
+		 board == [["x", 2, 3], [4, "o", "x"], [7, 8, 9]]
+		@game.board.set_position(0,1,"o")
+	end
+	if board == [["x", "o", "x"], [4, "o", "x"], [7, 8, 9]] ||
+		 board == [["x", "o", 3], ["x", "o", "x"], [7, 8, 9]] ||
+		 board == [["x", "o", 3], [4, "o", "x"], ["x", 8, 9]] ||
+		 board == [["x", "o", 3], [4, "o", "x"], [7, 8, "x"]]
+		@game.board.set_position(2,1,"o")
+	end
+	if board == [["x", "o", 3], [4, "o", "x"], [7, "x", 9]]
+		@game.board.set_position(2,0,"o")
+	end
+	if board == [["x", "o", "x"], [4, "o", "x"], ["o", "x", 9]]
+		@game.board.set_position(2,2,"o")
+	end
+	if board == [["x", "o", "x"], ["x", "o", 6], [7, 8, 9]] ||
+		 board == [["x", "o", "x"], [4, "o", 6], ["x", 8, 9]] ||
+		 board == [["x", "o", "x"], [4, "o", 6], [7, 8, "x"]]
+		@game.board.set_position(2,1,"o")
+	end
+	if board == [["x", "o", "x"], [4, "o", 6], [7, "x", 9]]
+		@game.board.set_position(1,0,"o")
+	end
+	if board == [["x", "o", "x"], ["o", "o", "x"], [7, "x", 9]]
+		@game.board.set_position(2,2,"o")
 	end
 end
 
@@ -97,28 +184,28 @@ end
 #
 ##################################################
 
-def full_game
-
+def game_loop
+	# print `clear`
 	puts "Please pick the number to where you want to play:\n"
 	
 	display(@game.board.board)
 	
-	player_number_picked = gets.chomp
+	player_choice = gets.chomp
 
-	player_number_picked = if player_number_picked =~ /\d/
-		player_case(player_number_picked)
+	player_position = if player_choice =~ /\d/
+		player_case(player_choice)
 	else
 		puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
-		full_game
+		game_loop
 	end
 
-	@game.board.set_position(player_number_picked[0], player_number_picked[1], "x")
-	winner_check
+	@game.board.set_position(player_position[0], player_position[1], "x")
+	check_for_winner
 
-	computer_turn
-	winner_check
+	computer_turn(@game.board.board)
+	check_for_winner
 
-	full_game
+	game_loop
 end
 
 enter_game
