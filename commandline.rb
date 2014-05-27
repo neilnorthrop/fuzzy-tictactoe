@@ -104,6 +104,32 @@ def computer_turn(board)
 	if board == [[1, 2, 3], [4, 5, "x"], [7, 8, 9]]
 		@game.board.set_position(0,2,"o")
 	end
+	if board == [["x", 2, "o"], [4, 5, "x"], [7, 8, 9]] ||
+		 board == [[1, "x", "o"], [4, 5, "x"], [7, 8, 9]] ||
+		 board == [[1, 2, "o"], [4, "x", "x"], [7, 8, 9]]
+		@game.board.set_position(1,0,"o")
+	end
+	if board == [[1, 2, "o"], ["x", 5, "x"], [7, 8, 9]]
+		@game.board.set_position(1,1,"o")
+	end
+	if board == [[1, 2, "o"], ["o", "x", "x"], ["x", 8, 9]] ||
+		 board == [[1, 2, "o"], ["o", "x", "x"], [7, 8, "x"]] 
+		@game.board.set_position(0,0,"o")
+	end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	if board == [[1, 2, 3], [4, 5, 6], [7, "x", 9]]
 		@game.board.set_position(0,1,"o")
 	end
