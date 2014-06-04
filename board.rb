@@ -65,9 +65,14 @@ if __FILE__==$0
 			assert_kind_of Array, @test_board.board
 		end
 
-		def test_setting_a_position_on_the_board
+		def test_setting_an_X_position_on_the_board
 			@test_board.set_position(1, "X")
 			assert_includes @test_board.board, "X"
+		end
+
+		def test_setting_an_O_position_on_the_board
+			@test_board.set_position(1, "O")
+			assert_includes @test_board.board, "O"
 		end
 
 		def test_setting_another_position_on_the_board
