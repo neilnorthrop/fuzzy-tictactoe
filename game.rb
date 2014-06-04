@@ -23,7 +23,12 @@ class Tictactoe < Board
 	end
 
 	def computer_turn
-		players_moves = []
+		players_moves, computer_move = [], []
+		@board.board.each.with_index do |v,k|
+			if v == "O"
+				computer_move << k
+			end
+		end
 		@board.board.each.with_index do |v,k|
 			if v == "X"
 				players_moves << k
@@ -31,19 +36,19 @@ class Tictactoe < Board
 		end
 		@board.log.info "#{players_moves}"
 		# Check for computer win
-		# @game.WINNING_POSITIONS.each do |row|
-		# 	left_over_position = row - @game.board.computer_collection
-		# 	if left_over_position.count == 1
-		# 		return left_over_position
-		# 	end
-		# end
+		WINNING_POSITIONS.each do |row|
+			if (row - computer_move).count == 1
+				computer_move << @board.board[(row - computer_move).pop]
+			end
+		end
 		# Check for block
 		WINNING_POSITIONS.each do |row|
 			if (row - players_moves).count == 1
-				@board.board[(row - players_moves).pop] = "O"
+				computer_move << @board.board[(row - players_moves).pop]
 			end
 		end
 		# Check for best move
+		@board.set_position(computer_move.pop, "O")
 	end
 
 	def check_game
@@ -98,16 +103,39 @@ if __FILE__==$0
 		end
 
 		def test_computer_turn_blocks_players_two_in_a_row_diagonal
-			skip
+			@test_game.board.set_position(1, "X")
+			@test_game.board.set_position(5, "X")
+			@test_game.computer_turn
+			assert_equal ["X", 2, 3, 4, "X", 6, 7, 8, "O"], @test_game.board.board
+		end
+
+		def test_computer_turn_takes_the_win_with_two_in_a_row
 			@test_game.board.set_position(1, "X")
 			@test_game.board.set_position(2, "X")
+			@test_game.board.set_position(5, "X")
+			@test_game.board.set_position(7, "O")
+			@test_game.board.set_position(8, "O")
 			@test_game.computer_turn
-			assert_equal ["X", "X", "O", 4, 5, 6, 7, 8, 9], @test_game.board.board
+			assert_equal ["X", "X", 3, 4, "X", 6, "O", "O", "O"], @test_game.board.board
+		end
+
+		def test_computer_turn_takes_the_win_with_two_in_a_row
+			@test_game.board.set_position(7, "X")
+			@test_game.board.set_position(8, "X")
+			@test_game.board.set_position(4, "X")
+			@test_game.board.set_position(6, "O")
+			@test_game.board.set_position(9, "O")
+			@test_game.computer_turn
+			assert_equal [1, 2, "O", "X", 5, "O", "X", "X", "O"], @test_game.board.board
 		end
 	end
 end
 
+__END__
 
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
 
 
 
