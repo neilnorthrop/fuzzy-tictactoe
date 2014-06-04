@@ -1,29 +1,24 @@
 #! /usr/bin/env ruby
 
+require 'logger'
 require 'pp'
 
 class Board
-	attr_accessor :board
+	attr_accessor :board, :log, :play_collection, :computer_collection
 
 	def initialize
 		@board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-	end
-
-	def display
-		print "[#{@board[0]}, #{@board[1]}, #{@board[2]}]\n[#{@board[3]}, #{@board[4]}, #{@board[5]}]\n[#{@board[6]}, #{@board[7]}, #{@board[8]}]\n"
+		@play_collection = []
+		@computer_collection = []
+		@log = Logger.new "tictactoe.txt"
 	end
 
 	def set_position(position, letter)
-		begin
-			if @board[board.find_index(position)].nil?
-				return nil
-			else
-				@board[board.find_index(position)] = letter
-			end
-		rescue Exception => e 
-		  # puts e.message  
-		  # puts e.backtrace.inspect 
+		if @board.find_index(position) == nil
+			return nil
 		end
+		index = @board.find_index(position)
+		@board[index] = letter
 	end
 
 	def clear_board
@@ -71,19 +66,19 @@ if __FILE__==$0
 		end
 
 		def test_setting_a_position_on_the_board
-			@test_board.set_position(1, "x")
-			assert_includes @test_board.board, "x"
+			@test_board.set_position(1, "X")
+			assert_includes @test_board.board, "X"
 		end
 
 		def test_setting_another_position_on_the_board
-			@test_board.set_position(2,"x")
-			@test_board.set_position(4,"x")
-			assert_equal [1, "x", 3, "x", 5, 6, 7, 8, 9], @test_board.board
+			@test_board.set_position(2,"X")
+			@test_board.set_position(4,"X")
+			assert_equal [1, "X", 3, "X", 5, 6, 7, 8, 9], @test_board.board
 		end
 
 		def test_setting_a_position_ontop_of_another_position
-			@test_board.set_position(2,"x")
-			assert_equal nil, @test_board.set_position(2,"x")
+			@test_board.set_position(2,"X")
+			assert_equal nil, @test_board.set_position(2,"X")
 		end
 
 		def test_that_board_responds_to_display
