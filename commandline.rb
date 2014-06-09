@@ -24,7 +24,6 @@ def enter_game
 end
 
 def check_for_winner
-	@game.check_game
 end
 
 def display(board)
