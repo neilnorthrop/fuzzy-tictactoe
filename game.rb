@@ -33,32 +33,27 @@ class Tictactoe < Board
 			end
 		end
 
-		# WINNING_POSITIONS.each do |row|
-		# 	if (row - computer_moves).count == 1
-		# 		computer_moves << @board.board[(row - computer_moves).pop]
-		# 	end
-		# end
-		
-
 		if players_moves.count == 1
-			# Player does not take middle
 			if !players_moves.include?(4)
 				computer_move_this_turn = 5
-			# Player takes middle
 			elsif players_moves.include?(4)
 				computer_move_this_turn = 1
 			end
 		else
 			WINNING_POSITIONS.each do |row|
-				if (row - players_moves).count == 1
-					if @board.board[(row - players_moves).pop] != "O"
+				if (row - computer_moves).count == 1
+					if @board.board[(row - computer_moves).pop] != "O" && @board.board[(row - computer_moves).pop] != "X"
+						computer_move_this_turn = @board.board[(row - computer_moves).pop]
+						break
+					end
+				elsif (row - players_moves).count == 1
+					if @board.board[(row - players_moves).pop] != "O" && @board.board[(row - computer_moves).pop] != "X"
 						computer_move_this_turn = @board.board[(row - players_moves).pop]
 					end
 				end
 			end
 		end
 
-		# print computer_move_this_turn
 		@board.set_position(computer_move_this_turn, "O")
 	end
 
@@ -123,11 +118,11 @@ if __FILE__==$0
 		end
 
 		def test_computer_turn_blocks_players_two_in_a_row_down_the_middle
+			@test_game.board.set_position(1, "O")
 			@test_game.board.set_position(2, "X")
+			@test_game.board.set_position(3, "O")
 			@test_game.board.set_position(5, "X")
 			@test_game.board.set_position(7, "X")
-			@test_game.board.set_position(1, "O")
-			@test_game.board.set_position(3, "O")
 			@test_game.computer_turn
 			assert_equal ["O", "X", "O", 4, "X", 6, "X", "O", 9], @test_game.board.board
 		end
@@ -162,21 +157,42 @@ if __FILE__==$0
 		end
 
 		def test_computer_turn_takes_the_win_with_two_in_a_row_down
+			@test_game.board.set_position(1, "O")
+			@test_game.board.set_position(4, "O")
+			@test_game.board.set_position(2, "X")
+			@test_game.board.set_position(3, "X")
+			@test_game.board.set_position(6, "X")
+			@test_game.computer_turn
+			assert_equal ["O", "X", "X", "O", 5, "X", "O", 8, 9], @test_game.board.board
 		end
 
 		def test_computer_turn_takes_the_win_with_two_in_a_row_across
+			@test_game.board.set_position(1, "O")
+			@test_game.board.set_position(2, "O")
+			@test_game.board.set_position(4, "X")
+			@test_game.board.set_position(7, "X")
+			@test_game.board.set_position(6, "X")
+			@test_game.computer_turn
+			assert_equal ["O", "O", "O", "X", 5, "X", "X", 8, 9], @test_game.board.board
 		end
 
 		def test_computer_turn_takes_the_win_with_two_in_a_row_diagonal
+			@test_game.board.set_position(1, "X")
+			@test_game.board.set_position(2, "X")
+			@test_game.board.set_position(3, "O")
+			@test_game.board.set_position(5, "O")
+			@test_game.board.set_position(6, "X")
+			@test_game.computer_turn
+			assert_equal ["X", "X", "O", 4, "O", "X", "O", 8, 9], @test_game.board.board
 		end
 	end
 end
 
 __END__
 
-[O, X, O]
-[4, X, 6]
-[X, 8, 9]
+[O, X, X]
+[O, 5, X]
+[O, 8, 9]
 
 [1, 2, 3]
 [4, 5, 6]
