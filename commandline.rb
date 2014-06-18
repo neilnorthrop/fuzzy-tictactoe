@@ -55,13 +55,26 @@ def player_turn
 	end
 end
 
+def game_win
+	if @game.check_game == "PLAYER WINS!"
+		puts "PLAYER WINS!"
+		enter_game
+	elsif @game.check_game == "COMPUTER WINS!"
+		puts "COMPUTER WINS!"
+		enter_game
+	elsif @game.check_game == "IT IS A DRAW!"
+		puts "IT IS A DRAW!"
+		enter_game
+	end
+end
+
 def game_loop
-	# print `clear`
+	print `clear`
 	player_turn
-	@game.check_game
+	game_win
 
 	@game.computer_turn
-	@game.check_game
+	game_win
 
 	game_loop
 end
