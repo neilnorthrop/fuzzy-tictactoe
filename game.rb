@@ -73,25 +73,26 @@ class Tictactoe < Board
 				end
 			end
 			if computer_move_this_turn == false
-				@board.set_position(tally_moves_left.sample, "O")
+				if players_moves.include?(0) && players_moves.include?(2) && players_moves.include?(5) && players_moves.include?(7)
+					@board.set_position(tally_moves_left.sample, "O")
+				elsif players_moves.include?(0) && players_moves.include?(5)
+					@board.set_position(3, "O")
+				elsif players_moves.include?(0) && players_moves.include?(8)
+					@board.set_position(2, "O")
+				elsif players_moves.include?(0) && players_moves.include?(7)
+					@board.set_position(4, "O")
+				elsif players_moves.count != computer_moves.count				
+					@board.set_position(tally_moves_left.sample, "O")
+				end
 			end
 		end
-					# if players_moves.include?(0) && players_moves.include?(5)
-					# 	@board.set_position(3, "O")
-					# elsif players_moves.include?(0) && players_moves.include?(8)
-					# 	@board.set_position(2, "O")
-					# elsif players_moves.include?(0) && players_moves.include?(7)
-					# 	@board.set_position(4, "O")
-					# elsif players_moves.count != computer_moves.count				
-					# 	@board.set_position(tally_moves_left.sample, "O")
-					# end
 	end
 
 	def check_game
-		players_moves, computer_move = [], []
+		players_moves, computer_moves = [], []
 		@board.board.each.with_index do |v,k|
 			if v == "O"
-				computer_move << k
+				computer_moves << k
 			elsif v == "X"
 				players_moves << k
 			end
@@ -100,7 +101,14 @@ class Tictactoe < Board
 			if row == players_moves.sort
 				puts "PLAYER IS THE WINNER!"
 				enter_game
+			elsif row == computer_moves.sort
+				puts "COMPUTER IS THE WINNER!"
+				enter_game
 			end
+		end
+		if tally_moves_left.empty?
+			puts "GAME IS A TIE!"
+			enter_game
 		end
 	end
 end
