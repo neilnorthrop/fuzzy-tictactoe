@@ -32,7 +32,7 @@ def display(board)
 end
 
 def player_turn
-	# print `clear`
+	print `clear`
 	@play_this_turn = 0
 	puts "Please pick the number to where you want to play:\n"
 

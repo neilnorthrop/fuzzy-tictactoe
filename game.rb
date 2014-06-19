@@ -71,6 +71,16 @@ class Tictactoe < Board
 			if computer_move_this_turn == false
 				if players_moves.sort == [0, 2, 5, 7]
 					@board.set_position(tally_moves_left.sample, "O")
+				elsif players_moves.sort == [1, 3]
+					@board.set_position(1, "O")
+				elsif players_moves.sort == [5, 7]
+					@board.set_position(3, "O")
+				elsif players_moves.sort == [1, 5]
+					@board.set_position(2, "O")
+				elsif players_moves.sort == [3, 7]
+					@board.set_position(6, "O")
+				elsif players_moves.sort == [4, 8]
+					@board.set_position(3, "O")
 				elsif players_moves.sort == [0, 5]
 					@board.set_position(3, "O")
 				elsif players_moves.sort == [0, 8]
@@ -94,7 +104,22 @@ class Tictactoe < Board
 			end
 		end
 		WINNING_POSITIONS.each do |row|
-			if row == players_moves.sort
+			players_winning_move, computers_winning_move = [], []
+			players_moves.each do |position|
+				if row.include?(position)
+					players_winning_move << position
+				end
+			end
+			computers_winning_move.each do |position|
+				if row.include?(position)
+					computers_winning_move << position
+				end
+			end
+			if row == players_winning_move
+				return "PLAYER WINS!"
+			elsif row == computers_winning_move
+				return "COMPUTER WINS!"
+			elsif row == players_moves.sort
 				return "PLAYER WINS!"
 			elsif row == computer_moves.sort
 				return "COMPUTER WINS!"
@@ -264,6 +289,19 @@ if __FILE__==$0
 			@test_game.board.set_position(6, "O")
 			@test_game.board.set_position(7, "O")
 			assert_equal "IT IS A DRAW!", @test_game.check_game
+		end
+
+		def test_player_wins_with_full_game_board
+			@test_game.board.set_position(1, "X")
+			@test_game.board.set_position(6, "X")
+			@test_game.board.set_position(7, "X")
+			@test_game.board.set_position(8, "X")
+			@test_game.board.set_position(9, "X")
+			@test_game.board.set_position(2, "O")
+			@test_game.board.set_position(3, "O")
+			@test_game.board.set_position(4, "O")
+			@test_game.board.set_position(5, "O")
+			assert_equal "PLAYER WINS!", @test_game.check_game
 		end
 
 		def test_computer_turn_blocks_players_positioning_for_a_fork
