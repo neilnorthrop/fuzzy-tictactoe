@@ -73,16 +73,10 @@ class Tictactoe < Board
 					@board.set_position(tally_moves_left.sample, "O")
 				elsif players_moves.sort == [1, 3]
 					@board.set_position(1, "O")
-				elsif players_moves.sort == [5, 7]
+				elsif players_moves.sort == [5, 7] || players_moves.sort == [1, 5] || players_moves.sort == [4, 8] || players_moves.sort == [0, 5]
 					@board.set_position(3, "O")
-				elsif players_moves.sort == [1, 5]
-					@board.set_position(2, "O")
 				elsif players_moves.sort == [3, 7]
-					@board.set_position(6, "O")
-				elsif players_moves.sort == [4, 8]
-					@board.set_position(3, "O")
-				elsif players_moves.sort == [0, 5]
-					@board.set_position(3, "O")
+					@board.set_position(7, "O")
 				elsif players_moves.sort == [0, 8]
 					@board.set_position(2, "O")
 				elsif players_moves.sort == [0, 7]
@@ -95,7 +89,7 @@ class Tictactoe < Board
 	end
 
 	def check_game
-		players_moves, computer_moves = [], []
+		players_moves, computer_moves, winner = [], [], false
 		@board.board.each.with_index do |v,k|
 			if v == "O"
 				computer_moves << k
@@ -104,28 +98,30 @@ class Tictactoe < Board
 			end
 		end
 		WINNING_POSITIONS.each do |row|
-			players_winning_move, computers_winning_move = [], []
-			players_moves.each do |position|
-				if row.include?(position)
-					players_winning_move << position
+			# Loop 5 times
+			5.times do
+				# Take the first 3 from players_moves and computer_moves and put it in a variable
+				first_three = players_moves.take(3)
+				# Compare the row with the first 3 variable
+				if row == first_three.sort
+				# If true, puts "PLAYER WINS!"
+					return "PLAYER WINS!"
+				else
+				# Else rotate players_moves, restart the loop, and add 1 to x
+					players_moves = players_moves.rotate
 				end
 			end
-			computers_winning_move.each do |position|
-				if row.include?(position)
-					computers_winning_move << position
+			5.times do
+				first_three = computer_moves.take(3)
+				if row == first_three.sort
+					return "COMPUTER WINS!"
+				else
+					computer_moves = computer_moves.rotate
 				end
 			end
-			if row == players_winning_move
-				return "PLAYER WINS!"
-			elsif row == computers_winning_move
-				return "COMPUTER WINS!"
-			elsif row == players_moves.sort
-				return "PLAYER WINS!"
-			elsif row == computer_moves.sort
-				return "COMPUTER WINS!"
-			elsif tally_moves_left.empty?
-				return "IT IS A DRAW!"
-			end
+		end
+		if tally_moves_left.empty?
+			return "IT IS A DRAW!"
 		end
 	end
 end
@@ -302,6 +298,17 @@ if __FILE__==$0
 			@test_game.board.set_position(4, "O")
 			@test_game.board.set_position(5, "O")
 			assert_equal "PLAYER WINS!", @test_game.check_game
+		end
+
+		def test_computer_wins_with_full_game_board
+			@test_game.board.set_position(1, "X")
+			@test_game.board.set_position(2, "X")
+			@test_game.board.set_position(5, "X")
+			@test_game.board.set_position(7, "X")
+			@test_game.board.set_position(3, "O")
+			@test_game.board.set_position(6, "O")
+			@test_game.board.set_position(9, "O")
+			assert_equal "COMPUTER WINS!", @test_game.check_game
 		end
 
 		def test_computer_turn_blocks_players_positioning_for_a_fork
