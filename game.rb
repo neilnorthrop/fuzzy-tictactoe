@@ -96,16 +96,11 @@ class Tictactoe < Board
 			end
 		end
 		WINNING_POSITIONS.each do |row|
-			# Loop 5 times
 			5.times do
-				# Take the first 3 from players_moves and computer_moves and put it in a variable
 				first_three = players_moves.take(3)
-				# Compare the row with the first 3 variable
 				if row == first_three.sort
-				# If true, puts "PLAYER WINS!"
 					return "PLAYER WINS!"
 				else
-				# Else rotate players_moves, restart the loop, and add 1 to x
 					players_moves = players_moves.rotate
 				end
 			end
@@ -309,16 +304,36 @@ if __FILE__==$0
 			assert_equal "COMPUTER WINS!", @test_game.check_game
 		end
 
-		def test_computer_turn_blocks_players_positioning_for_a_fork
+		def test_computer_turn_blocks_players_positioning_for_a_top_left_fork
+			@test_game.board.set_position(2, "X")
+			@test_game.board.set_position(4, "X")
+			@test_game.board.set_position(5, "O")
+			@test_game.computer_turn
+			assert_equal ["O", "X", 3, "X", "O", 6, 7, 8, 9], @test_game.board.board
 		end
 
-		def test_computer_turn_plays_next_to_a_previous_computer_play
+		def test_computer_turn_blocks_players_positioning_for_a_top_right_fork
+			@test_game.board.set_position(2, "X")
+			@test_game.board.set_position(6, "X")
+			@test_game.board.set_position(5, "O")
+			@test_game.computer_turn
+			assert_equal [1, "X", "O", 4, "O", "X", 7, 8, 9], @test_game.board.board
 		end
 
-		def test_computer_turn_creates_fork
+		def test_computer_turn_blocks_players_positioning_for_a_bottom_left_fork
+			@test_game.board.set_position(4, "X")
+			@test_game.board.set_position(8, "X")
+			@test_game.board.set_position(5, "O")
+			@test_game.computer_turn
+			assert_equal [1, 2, 3, "X", "O", 6, "O", "X", 9], @test_game.board.board
 		end
 
-		def test_computer_turn_
+		def test_computer_turn_blocks_players_positioning_for_a_bottom_right_fork
+			@test_game.board.set_position(6, "X")
+			@test_game.board.set_position(8, "X")
+			@test_game.board.set_position(5, "O")
+			@test_game.computer_turn
+			assert_equal [1, 2, "O", 4, "O", "X", 7, "X", 9], @test_game.board.board
 		end
 	end
 end
