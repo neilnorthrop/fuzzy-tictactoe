@@ -2,7 +2,18 @@
 require 'logger'
 
 class Board
-	attr_accessor :board, :log, :play_collection, :computer_collection
+	attr_accessor :board, :log, :play_collection, :computer_collection, :WINNING_POSITIONS
+
+	WINNING_POSITIONS = [
+		[0, 1, 2],
+		[3, 4, 5],
+		[6, 7, 8],
+		[0, 3, 6],
+		[1, 4, 7],
+		[2, 5, 8],
+		[0, 4, 8],
+		[2, 4, 6]
+	]
 
 	def initialize
 		@board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -11,22 +22,100 @@ class Board
 		@log = Logger.new "tictactoe.txt"
 	end
 
+	def clear_board
+		@board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	end
+
+	def print_board
+		return @board
+	end
+
 	def set_position(position, letter)
-		if @board.find_index(position) == nil
+		if check_position(position, letter) == false
 			return nil
 		end
 		index = @board.find_index(position)
 		@board[index] = letter
 	end
 
-	def clear_board
-		@board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	def set_index_position(index, letter)
+		if @board[index] =~ /X|O/
+			return false
+		end
+		@board[index] = letter
+	end
+
+	def check_position(position, letter)
+		if @board.find_index(position) == nil
+			false
+		else
+			true
+		end
+	end
+
+	def move_does_not_contain(index, letter)
+		@board[index] != letter
+	end
+
+	def collection_computers_moves
+		computer_moves = []
+		@board.each.with_index do |v,k|
+			if v == "O"
+				computer_moves << k
+			end
+		end
+		return computer_moves.sort
+	end
+
+	def collection_players_moves
+		players_moves = []
+		@board.each.with_index do |v,k|
+			if v == "X"
+				players_moves << k
+			end
+		end
+		return players_moves.sort
+	end
+
+	def tally_moves_remaining
+		moves_remaining = []
+		@board.each do |position|
+			if position != "X" && position != "O"
+				moves_remaining << position
+			end
+		end
+		return moves_remaining
+	end
+
+	def check_for_winner(players_moves, computer_moves)
+		WINNING_POSITIONS.each do |row|
+			3.times do
+				first_three = players_moves.take(3)
+				if row == first_three.sort
+					return "PLAYER WINS!"
+				else
+					players_moves = players_moves.rotate
+				end
+			end
+			3.times do
+				first_three = computer_moves.take(3)
+				if row == first_three.sort
+					return "COMPUTER WINS!"
+				else
+					computer_moves = computer_moves.rotate
+				end
+			end
+		end
+		if tally_moves_remaining.empty?
+			return "IT IS A DRAW!"
+		end
 	end
 end
 
 if __FILE__==$0
 	require 'minitest/autorun'
 	require 'minitest/unit'
+	print `clear`
 
 	class TestBoard < MiniTest::Unit::TestCase
 
@@ -86,6 +175,36 @@ if __FILE__==$0
 
 		def test_that_board_responds_to_display
 			assert_respond_to @test_board, :display, "#{@test_board} does not respond to display"
+		end
+
+		def test_that_board_checks_for_player_position_at_1
+			@test_board.set_position(1, "X")
+			assert_equal false, @test_board.check_position(1, "X")
+		end
+
+		def test_that_board_checks_for_player_position_at_2
+			@test_board.set_position(1, "X")
+			assert_equal true, @test_board.check_position(2, "X")
+		end
+
+		def test_setting_an_X_index_position
+			@test_board.set_index_position(1, "X")
+			assert_equal [1, "X", 3, 4, 5, 6, 7, 8, 9], @test_board.print_board
+		end
+
+		def test_setting_X_index_position_on_top_of_another_X
+			@test_board.set_index_position(1, "X")
+			assert_equal false, @test_board.set_index_position(1, "X")
+		end
+
+		def test_that_position_does_not_contain_an_X
+			@test_board.set_position(1, "X")
+			assert_equal true, @test_board.move_does_not_contain(9, "X")
+		end
+
+		def test_that_position_does_contain_an_X
+			@test_board.set_position(1, "X")
+			assert_equal false, @test_board.move_does_not_contain(0, "X")
 		end
 	end
 end

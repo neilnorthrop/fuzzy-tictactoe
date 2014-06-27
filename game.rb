@@ -1,121 +1,97 @@
 #! /usr/bin/env ruby
 require './board.rb'
 
-class Tictactoe < Board
-	attr_accessor :WINNING_POSITIONS
+class Game < Board
 
-	WINNING_POSITIONS = [
-		[0, 1, 2],
-		[3, 4, 5],
-		[6, 7, 8],
-		[0, 3, 6],
-		[1, 4, 7],
-		[2, 5, 8],
-		[0, 4, 8],
-		[2, 4, 6]
-	]
-
-	def initialize(board)
-		@board = board
-		@WINNING_POSITIONS = WINNING_POSITIONS
+	def initialize
+		@board = Board.new
+		@WINNING_POSITIONS = @board.WINNING_POSITIONS
 	end
 
-	def tally_moves_left
-		moves_left = []
-		@board.board.each do |position|
-			if position != "X" && position != "O"
-				moves_left << position
+	def display_board
+		@board.print_board
+	end
+
+	def computer_opening_move
+		if !players_moves.include?(4)
+			@board.set_position(5, "O")
+			@turn_taken = true
+		else 
+			@board.set_position(1, "O")
+			@turn_taken = true
+		end
+	end
+
+	def set_index(index, letter)
+		@board.set_index_position(index, letter)
+	end
+
+	def players_moves
+		return @board.collection_players_moves
+	end
+
+	def computers_moves
+		return @board.collection_computers_moves
+	end
+
+	def position_empty(index, letter1, letter2)
+		@board.move_does_not_contain(index, letter1) && @board.move_does_not_contain(index, letter2)
+	end
+
+	def computer_block_and_win
+		WINNING_POSITIONS.each do |row|
+			if (row - computers_moves).count == 1 && @turn_taken == false
+				moves_remaining = (row - computers_moves).shift
+				if position_empty(moves_remaining, "O", "X")
+					set_index(moves_remaining, "O")
+					@turn_taken = true
+				end
+			elsif (row - players_moves).count == 1 && @turn_taken == false
+				moves_remaining = (row - players_moves).shift
+				if position_empty(moves_remaining, "O", "X")
+					set_index(moves_remaining, "O")
+					@turn_taken = true
+				end
 			end
 		end
-		return moves_left
+	end
+
+	def computer_blocking_fork
+		if @turn_taken == false
+			if players_moves == [0, 2, 5, 7]
+				@board.set_position(@board.tally_moves_remaining.sample, "O")
+			elsif players_moves == [0, 5, 6]
+				@board.set_position(4, "O")
+			elsif players_moves == [1, 3]
+				@board.set_position(1, "O")
+			elsif players_moves == [5, 7] || players_moves == [1, 5] || players_moves == [4, 8] || players_moves == [0, 5]
+				@board.set_position(3, "O")
+			elsif players_moves == [3, 7]
+				@board.set_position(7, "O")
+			elsif players_moves == [0, 8]
+				@board.set_position(2, "O")
+			elsif players_moves == [0, 7]
+				@board.set_position(4, "O")
+			elsif players_moves.count != computers_moves.count				
+				@board.set_position(@board.tally_moves_remaining.sample, "O")
+			end
+		end
 	end
 
 	def computer_turn
-		players_moves, computer_moves, computer_move_this_turn = [], [], false
-
-		@board.board.each.with_index do |v,k|
-			if v == "O"
-				computer_moves << k
-			elsif v == "X"
-				players_moves << k
-			end
-		end
+		@turn_taken = false
 
 		case 
-		when players_moves.count == 1 && computer_move_this_turn == false
-			if !players_moves.include?(4)
-				@board.set_position(5, "O")
-				computer_move_this_turn = true
-				return
-			else 
-				@board.set_position(1, "O")
-				computer_move_this_turn = true
-				return
-			end
-		when players_moves.count > 1 && computer_move_this_turn == false
-			WINNING_POSITIONS.each do |row|
-				if (row - computer_moves).count == 1 && computer_move_this_turn == false
-					if @board.board[(row - computer_moves).pop] != "O" && @board.board[(row - computer_moves).pop] != "X"
-						@board.set_position(@board.board[(row - computer_moves).pop], "O")
-						computer_move_this_turn = true
-					end
-				elsif (row - players_moves).count == 1 && computer_move_this_turn == false
-					if @board.board[(row - players_moves).pop] != "O" && @board.board[(row - players_moves).pop] != "X"
-						@board.set_position(@board.board[(row - players_moves).pop], "O")
-						computer_move_this_turn = true
-					end
-				end
-			end
-			if computer_move_this_turn == false
-				if players_moves.sort == [0, 2, 5, 7]
-					@board.set_position(tally_moves_left.sample, "O")
-				elsif players_moves.sort == [1, 3]
-					@board.set_position(1, "O")
-				elsif players_moves.sort == [5, 7] || players_moves.sort == [1, 5] || players_moves.sort == [4, 8] || players_moves.sort == [0, 5]
-					@board.set_position(3, "O")
-				elsif players_moves.sort == [3, 7]
-					@board.set_position(7, "O")
-				elsif players_moves.sort == [0, 8]
-					@board.set_position(2, "O")
-				elsif players_moves.sort == [0, 7]
-					@board.set_position(4, "O")
-				elsif players_moves.count != computer_moves.count				
-					@board.set_position(tally_moves_left.sample, "O")
-				end
-			end
+		when players_moves.count == 1
+			computer_opening_move
+		when players_moves.count > 1
+			computer_block_and_win
+			computer_blocking_fork
 		end
 	end
 
 	def check_game
-		players_moves, computer_moves, winner = [], [], false
-		@board.board.each.with_index do |v,k|
-			if v == "O"
-				computer_moves << k
-			elsif v == "X"
-				players_moves << k
-			end
-		end
-		WINNING_POSITIONS.each do |row|
-			5.times do
-				first_three = players_moves.take(3)
-				if row == first_three.sort
-					return "PLAYER WINS!"
-				else
-					players_moves = players_moves.rotate
-				end
-			end
-			5.times do
-				first_three = computer_moves.take(3)
-				if row == first_three.sort
-					return "COMPUTER WINS!"
-				else
-					computer_moves = computer_moves.rotate
-				end
-			end
-		end
-		if tally_moves_left.empty?
-			return "IT IS A DRAW!"
-		end
+		@board.check_for_winner(players_moves, computers_moves)
 	end
 end
 
@@ -127,7 +103,7 @@ if __FILE__==$0
 	class TestTictactoe < Minitest::Unit::TestCase
 
 		def setup
-			@test_game = Tictactoe.new(Board.new)
+			@test_game = Game.new
 		end
 
 		def test_building_game_class
@@ -139,7 +115,7 @@ if __FILE__==$0
 		end
 
 		def test_game_includes_default_size_board
-			assert_equal [1, 2, 3, 4, 5, 6, 7, 8, 9], @test_game.board.board
+			assert_equal [1, 2, 3, 4, 5, 6, 7, 8, 9], @test_game.display_board
 		end
 
 		def test_computer_turn_blocks_player_across
@@ -334,6 +310,16 @@ if __FILE__==$0
 			@test_game.board.set_position(5, "O")
 			@test_game.computer_turn
 			assert_equal [1, 2, "O", 4, "O", "X", 7, "X", 9], @test_game.board.board
+		end
+
+		def test_edge_case_for_computer_block
+			@test_game.board.set_position(1, "X")
+			@test_game.board.set_position(6, "X")
+			@test_game.board.set_position(7, "X")
+			@test_game.board.set_position(3, "O")
+			@test_game.board.set_position(5, "O")
+			@test_game.computer_turn
+			assert_equal ["X", 2, "O", "O", "O", "X", "X", 8, 9], @test_game.board.board
 		end
 	end
 end

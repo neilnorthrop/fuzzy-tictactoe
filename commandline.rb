@@ -11,7 +11,7 @@ def enter_game
 		puts "okay, lets play\n\n" + "*" * 30 + "\n\n"
 		puts "You'll start first and be the letter 'x'\n\n"
 		puts "\n\n" + "*" * 30 + "\n\n"
-		@game = Tictactoe.new(Board.new)
+		@game = Game.new
 		game_loop
 	when 'no'
 		print `clear`
@@ -37,8 +37,14 @@ def player_turn
 
 	gets.chomp
 
-	player_position = if $_ =~ /\d{1}/
-											$_.to_i
+	player_position = if $_ =~ /\d/
+											if $_.to_i < 10
+												$_.to_i
+											else
+												@game.board.log.debug "Player chose: #{$_}"
+												puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
+												player_turn
+											end
 										else
 											@game.board.log.debug "Player chose: #{$_}"
 											puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
