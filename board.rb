@@ -57,24 +57,14 @@ class Board
 		@board[index] != letter
 	end
 
-	def collection_computers_moves
+	def moves(letter)
 		computer_moves = []
 		@board.each.with_index do |v,k|
-			if v == "O"
+			if v == letter
 				computer_moves << k
 			end
 		end
 		return computer_moves.sort
-	end
-
-	def collection_players_moves
-		players_moves = []
-		@board.each.with_index do |v,k|
-			if v == "X"
-				players_moves << k
-			end
-		end
-		return players_moves.sort
 	end
 
 	def tally_moves_remaining

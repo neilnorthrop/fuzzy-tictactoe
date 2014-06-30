@@ -27,29 +27,29 @@ class Game < Board
 	end
 
 	def players_moves
-		return @board.collection_players_moves
+		return @board.moves("X")
 	end
 
 	def computers_moves
-		return @board.collection_computers_moves
+		return @board.moves("O")
 	end
 
 	def position_empty(index, letter1, letter2)
 		@board.move_does_not_contain(index, letter1) && @board.move_does_not_contain(index, letter2)
 	end
 
-	def computer_block_and_win
+	def computer_win_or_block
 		WINNING_POSITIONS.each do |row|
 			if (row - computers_moves).count == 1 && @turn_taken == false
-				moves_remaining = (row - computers_moves).shift
-				if position_empty(moves_remaining, "O", "X")
-					set_index(moves_remaining, "O")
+				move_remaining = (row - computers_moves).shift
+				if position_empty(move_remaining, "O", "X")
+					set_index(move_remaining, "O")
 					@turn_taken = true
 				end
 			elsif (row - players_moves).count == 1 && @turn_taken == false
-				moves_remaining = (row - players_moves).shift
-				if position_empty(moves_remaining, "O", "X")
-					set_index(moves_remaining, "O")
+				move_remaining = (row - players_moves).shift
+				if position_empty(move_remaining, "O", "X")
+					set_index(move_remaining, "O")
 					@turn_taken = true
 				end
 			end
@@ -72,7 +72,7 @@ class Game < Board
 				@board.set_position(2, "O")
 			elsif players_moves == [0, 7]
 				@board.set_position(4, "O")
-			elsif players_moves.count != computers_moves.count				
+			else
 				@board.set_position(@board.tally_moves_remaining.sample, "O")
 			end
 		end
@@ -85,7 +85,7 @@ class Game < Board
 		when players_moves.count == 1
 			computer_opening_move
 		when players_moves.count > 1
-			computer_block_and_win
+			computer_win_or_block
 			computer_blocking_fork
 		end
 	end
