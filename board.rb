@@ -2,7 +2,7 @@
 require 'logger'
 
 class Board
-  attr_accessor :board, :log, :play_collection, :computer_collection, :WINNING_POSITIONS
+  attr_accessor :board, :play_collection, :computer_collection, :WINNING_POSITIONS
 
   WINNING_POSITIONS = [
     [0, 1, 2],
@@ -19,7 +19,10 @@ class Board
     @board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     @play_collection = []
     @computer_collection = []
-    @log = Logger.new "tictactoe.txt"
+  end
+
+  def get_winning_positions
+    return WINNING_POSITIONS
   end
 
   def clear_board

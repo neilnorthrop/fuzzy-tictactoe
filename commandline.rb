@@ -24,16 +24,14 @@ def enter_game
 end
 
 def display(board)
-  @game.board.log.debug "[#{board.board[0]}, #{board.board[1]}, #{board.board[2]}], [#{board.board[3]}, #{board.board[4]}, #{board.board[5]}], [#{board.board[6]}, #{board.board[7]}, #{board.board[8]}]\n"
-  print "[#{board.board[0]}, #{board.board[1]}, #{board.board[2]}]\n[#{board.board[3]}, #{board.board[4]}, #{board.board[5]}]\n[#{board.board[6]}, #{board.board[7]}, #{board.board[8]}]\n"
+  print "[#{board[0]}, #{board[1]}, #{board[2]}]\n[#{board[3]}, #{board[4]}, #{board[5]}]\n[#{board[6]}, #{board[7]}, #{board[8]}]\n"
 end
 
 def player_turn
   print `clear`
-  @play_this_turn = 0
   puts "Please pick the number to where you want to play:\n"
 
-  display(@game.board)
+  display(@game.display_board)
 
   gets.chomp
 
@@ -41,20 +39,18 @@ def player_turn
                       if $_.to_i < 10
                         $_.to_i
                       else
-                        @game.board.log.debug "Player chose: #{$_}"
                         puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
                         player_turn
                       end
                     else
-                      @game.board.log.debug "Player chose: #{$_}"
                       puts "* " * 15 + "Please pick a number 1-9" + " *" * 15
                       player_turn
                     end
 
-  if @game.board.board[@game.board.board.find_index(player_position)] == nil
+  if @game.play(player_position, "X") == nil
     player_turn
   else
-    @game.board.set_position(player_position, "X")
+    @game.play(player_position, "X")
   end
 end
 
