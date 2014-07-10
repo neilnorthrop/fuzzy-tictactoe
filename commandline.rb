@@ -11,7 +11,7 @@ def enter_game
     puts "okay, lets play\n\n" + "*" * 30 + "\n\n"
     puts "You'll start first and be the letter 'x'\n\n"
     puts "\n\n" + "*" * 30 + "\n\n"
-    @game = Game.new
+    @game = BoardGame.new
     game_loop
   when 'no'
     print `clear`
@@ -47,10 +47,10 @@ def player_turn
                       player_turn
                     end
 
-  if @game.play(player_position, "X") == nil
+  if @game.set_position(player_position, "X") == nil
     player_turn
   else
-    @game.play(player_position, "X")
+    @game.set_position(player_position, "X")
   end
 end
 
