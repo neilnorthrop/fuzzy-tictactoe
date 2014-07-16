@@ -1,5 +1,6 @@
 #! /usr/bin/env ruby
-require './game.rb'
+require './boardgame.rb'
+require './computer_ai.rb'
 
 def enter_game
   puts "Do you want to play a game? Please type 'yes' or 'no'"
@@ -28,7 +29,7 @@ def display(board)
 end
 
 def player_turn
-  print `clear`
+  # print `clear`
   puts "Please pick the number to where you want to play:\n"
 
   display(@game.display_board)
@@ -55,24 +56,25 @@ def player_turn
 end
 
 def game_win
-  if @game.check_game == "PLAYER WINS!"
+  case @game.check_game
+  when "player"
     puts "PLAYER WINS!"
     enter_game
-  elsif @game.check_game == "COMPUTER WINS!"
+  when "computer"
     puts "COMPUTER WINS!"
     enter_game
-  elsif @game.check_game == "IT IS A DRAW!"
+  when "draw"
     puts "IT IS A DRAW!"
     enter_game
   end
 end
 
 def game_loop
-  print `clear`
+  # print `clear`
   player_turn
   game_win
 
-  @game.computer_turn
+  ComputerAI.computer_turn(@game)
   game_win
 
   game_loop
