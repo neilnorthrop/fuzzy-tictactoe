@@ -9,9 +9,7 @@ def enter_game
 
   case answer
   when 'yes'
-    puts "okay, lets play\n\n" + "*" * 30 + "\n\n"
-    puts "You'll start first and be the letter 'x'\n\n"
-    puts "\n\n" + "*" * 30 + "\n\n"
+    puts "okay, lets play\n\n" + "*" * 30 + "\n\nYou'll start first and be the letter 'x'\n\n" + "*" * 30 + "\n\n"
     @game = BoardGame.new
     game_loop
   when 'no'
@@ -29,7 +27,7 @@ def display(board)
 end
 
 def player_turn
-  # print `clear`
+  print `clear`
   puts "Please pick the number to where you want to play:\n"
 
   display(@game.display_board)
@@ -70,7 +68,7 @@ def game_win
 end
 
 def game_loop
-  # print `clear`
+  print `clear`
   player_turn
   game_win
 

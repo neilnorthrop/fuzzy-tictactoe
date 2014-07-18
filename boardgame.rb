@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 
 class BoardGame
-  attr_accessor :board, :WINNING_POSITIONS
+  attr_accessor :board
 
   WINNING_POSITIONS = [
     [0, 1, 2],
@@ -22,8 +22,8 @@ class BoardGame
     if check_position(position, letter) == false
       return nil
     end
-    index = @board.find_index(position)
-    @board[index] = letter
+    index = board.find_index(position)
+    board[index] = letter
   end
 
   def player_moves
@@ -61,7 +61,7 @@ class BoardGame
   end
 
   def display_board
-    return @board
+    return board
   end
 
   def WINNING_POSITIONS
@@ -69,14 +69,14 @@ class BoardGame
   end
 
   def set_at_index(index, letter)
-    if @board[index] =~ /X|O/
+    if board[index] =~ /X|O/
       return false
     end
-    @board[index] = letter
+    board[index] = letter
   end
 
   def check_position(position, letter)
-    if @board.find_index(position) == nil
+    if board.find_index(position) == nil
       false
     else
       true
@@ -84,12 +84,12 @@ class BoardGame
   end
 
   def move_does_not_contain(index, letter)
-    @board[index] != letter
+    board[index] != letter
   end
 
   def moves(letter)
     moves = []
-    @board.each.with_index do |v,k|
+    board.each.with_index do |v,k|
       if v == letter
         moves << k
       end

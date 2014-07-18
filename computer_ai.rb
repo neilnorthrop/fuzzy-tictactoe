@@ -16,20 +16,12 @@ class ComputerAI
 	  end
 	end
 
-  def self.set_position(position, letter)
-  	@game.set_position(position, letter)
-  end
-
-  def self.player_moves
-  	@game.display_board
-  end
-
   def self.computer_opening_move
     if !@game.player_moves.include?(4)
-      set_position(5, "O")
+      @game.set_position(5, "O")
       @turn_taken = true
     else 
-      set_position(1, "O")
+      @game.set_position(1, "O")
       @turn_taken = true
     end
   end
@@ -55,25 +47,25 @@ class ComputerAI
   def self.computer_blocking_fork
     if @turn_taken == false
       if @game.player_moves == [0, 2, 5, 7]
-        set_position(@game.tally_moves_remaining.sample, "O")
+        @game.set_position(@game.tally_moves_remaining.sample, "O")
       elsif @game.player_moves == [0, 5, 6]
-        set_position(4, "O")
+        @game.set_position(4, "O")
       elsif @game.player_moves == [1, 3]
-        set_position(1, "O")
+        @game.set_position(1, "O")
       elsif @game.player_moves == [5, 7] || 
             @game.player_moves == [1, 5] || 
             @game.player_moves == [4, 8] || 
             @game.player_moves == [0, 5]
-        set_position(3, "O")
+        @game.set_position(3, "O")
       elsif @game.player_moves == [3, 7]
-        set_position(7, "O")
+        @game.set_position(7, "O")
       elsif @game.player_moves == [0, 8] ||
             @game.player_moves == [2, 6]
-        set_position(2, "O")
+        @game.set_position(2, "O")
       elsif @game.player_moves == [0, 7]
-        set_position(4, "O")
+        @game.set_position(4, "O")
       else
-        set_position(@game.tally_moves_remaining.sample, "O")
+        @game.set_position(@game.tally_moves_remaining.sample, "O")
       end
     end
   end
