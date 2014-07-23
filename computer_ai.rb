@@ -1,14 +1,13 @@
 #! /usr/bin/env ruby
 
 class ComputerAI
-	attr_accessor :turn_taken, :WINNING_POSITIONS
-
+	attr_accessor :winning_positions
 	def self.computer_turn(game)
 		@game = game
-		@WINNING_POSITIONS = @game.WINNING_POSITIONS
+		@winning_positions = @game.winning_positions
 		@turn_taken = false
 
-		if @game.player_moves.count == 1
+		if player_moves.count == 1
 	    computer_opening_move
 	  else
 	    computer_win_or_block
@@ -16,8 +15,16 @@ class ComputerAI
 	  end
 	end
 
+	def self.player_moves
+		@game.moves("X")
+	end
+
+	def self.computer_moves
+		@game.moves("O")
+	end
+
   def self.computer_opening_move
-    if !@game.player_moves.include?(4)
+    if !player_moves.include?(4)
       @game.set_position(5, "O")
       @turn_taken = true
     else 
@@ -27,15 +34,15 @@ class ComputerAI
   end
 
   def self.computer_win_or_block
-    @WINNING_POSITIONS.each do |row|
-      if (row - @game.computer_moves).count == 1 && @turn_taken == false
-        move_remaining = (row - @game.computer_moves).shift
+    @winning_positions.each do |row|
+      if (row - computer_moves).count == 1 && @turn_taken == false
+        move_remaining = (row - computer_moves).shift
         if @game.position_empty(move_remaining, "O", "X")
           @game.set_at_index(move_remaining, "O")
           @turn_taken = true
         end
-      elsif (row - @game.player_moves).count == 1 && @turn_taken == false
-        move_remaining = (row - @game.player_moves).shift
+      elsif (row - player_moves).count == 1 && @turn_taken == false
+        move_remaining = (row - player_moves).shift
         if @game.position_empty(move_remaining, "O", "X")
           @game.set_at_index(move_remaining, "O")
           @turn_taken = true
@@ -46,23 +53,23 @@ class ComputerAI
 
   def self.computer_blocking_fork
     if @turn_taken == false
-      if @game.player_moves == [0, 2, 5, 7]
+      if player_moves == [0, 2, 5, 7]
         @game.set_position(@game.tally_moves_remaining.sample, "O")
-      elsif @game.player_moves == [0, 5, 6]
+      elsif player_moves == [0, 5, 6]
         @game.set_position(4, "O")
-      elsif @game.player_moves == [1, 3]
+      elsif player_moves == [1, 3]
         @game.set_position(1, "O")
-      elsif @game.player_moves == [5, 7] || 
-            @game.player_moves == [1, 5] || 
-            @game.player_moves == [4, 8] || 
-            @game.player_moves == [0, 5]
+      elsif player_moves == [5, 7] || 
+            player_moves == [1, 5] || 
+            player_moves == [4, 8] || 
+            player_moves == [0, 5]
         @game.set_position(3, "O")
-      elsif @game.player_moves == [3, 7]
+      elsif player_moves == [3, 7]
         @game.set_position(7, "O")
-      elsif @game.player_moves == [0, 8] ||
-            @game.player_moves == [2, 6]
+      elsif player_moves == [0, 8] ||
+            player_moves == [2, 6]
         @game.set_position(2, "O")
-      elsif @game.player_moves == [0, 7]
+      elsif player_moves == [0, 7]
         @game.set_position(4, "O")
       else
         @game.set_position(@game.tally_moves_remaining.sample, "O")

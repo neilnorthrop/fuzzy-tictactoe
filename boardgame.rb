@@ -1,29 +1,19 @@
 #! /usr/bin/env ruby
 
 class BoardGame
-  attr_accessor :board
-
-  WINNING_POSITIONS = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ]
+  attr_accessor :board, :winning_positions
 
   def initialize
     @board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    @winning_positions = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
   end
 
   def set_position(position, letter)
     if check_position(position, letter) == false
       return nil
+    else
+      set_at_index(board.find_index(position), letter)
     end
-    index = board.find_index(position)
-    board[index] = letter
   end
 
   def player_moves
@@ -37,7 +27,7 @@ class BoardGame
   def check_game
     players_moves = player_moves
     computers_moves = computer_moves
-    WINNING_POSITIONS.each do |row|
+    winning_positions.each do |row|
       5.times do
         first_three = players_moves.take(3)
         if row == first_three.sort
@@ -62,10 +52,6 @@ class BoardGame
 
   def display_board
     return board
-  end
-
-  def WINNING_POSITIONS
-    return WINNING_POSITIONS
   end
 
   def set_at_index(index, letter)
