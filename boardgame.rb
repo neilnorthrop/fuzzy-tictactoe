@@ -1,10 +1,11 @@
 #! /usr/bin/env ruby
 
 class BoardGame
-  attr_accessor :board, :winning_positions
+  attr_accessor :board, :winning_positions, :board_size
 
-  def initialize
-    @board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  def initialize(board_size = 3)
+    @board_size = board_size
+    @board = Array.new((1..(board_size*board_size)).to_a)
     @winning_positions = [[0, 1, 2],[3, 4, 5],[6, 7, 8],[0, 3, 6],[1, 4, 7],[2, 5, 8],[0, 4, 8],[2, 4, 6]]
   end
 
@@ -119,6 +120,17 @@ if __FILE__==$0
 
     def test_game_includes_default_size_board
       assert_equal [1, 2, 3, 4, 5, 6, 7, 8, 9], @test_game.display_board
+    end
+    
+    def test_board_size_of_4x4
+      @test_game = BoardGame.new(4)
+      assert_equal [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], @test_game.display_board
+    end
+    
+    def test_board_size_of_5x5
+      @test_game = BoardGame.new(5)
+      board = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+      assert_equal board, @test_game.display_board
     end
 
     def test_game_is_a_draw
